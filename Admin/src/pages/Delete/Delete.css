@@ -1,0 +1,84 @@
+.delete-container {
+  width: 70%;
+  margin-left: max(5vw, 25px);
+  margin-top: 50px;
+  color: #6d6d6d;
+  font-size: 16px;
+}
+
+.delete-title {
+  text-align: left;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.delete-btn {
+  max-width: 150px;
+  padding: 10px;
+  background-color: rgb(255, 76, 76);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.delete-btn:hover {
+  background-color: rgb(214, 51, 51);
+}
+
+.data-table {
+  margin-top: 20px;
+  margin-left: 0px;
+}
+
+.table-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #444;
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  text-align: left;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #000;
+}
+
+th {
+  background-color: #ddd;
+  font-weight: bold;
+  color: #000;
+}
+
+.delete-action-btn {
+  max-width: 100px;
+  padding: 8px 10px;
+  background-color: rgb(220, 53, 69);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.delete-action-btn:hover {
+  background-color: rgb(200, 35, 50);
+}

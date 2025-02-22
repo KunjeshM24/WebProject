@@ -1,0 +1,84 @@
+.update-container {
+  width: 70%;
+  margin-left: max(5vw, 25px);
+  margin-top: 50px;
+  color: #4a4a4a;
+  font-size: 16px;
+}
+
+.update-title {
+  text-align: left;
+  font-size: 22px;
+  font-weight: bold;
+  color: #222;
+}
+
+.update-button-group {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.update-btn {
+  max-width: 150px;
+  padding: 10px;
+  background-color: rgb(76, 175, 80);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.update-btn:hover {
+  background-color: rgb(56, 142, 60);
+}
+
+.update-data-table {
+  margin-top: 20px;
+  margin-left: 0px;
+}
+
+.update-table-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: left;
+}
+
+.update-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  text-align: left;
+}
+
+.update-table th, .update-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #000;
+}
+
+.update-table th {
+  background-color: #ccc;
+  font-weight: bold;
+  color: #000;
+}
+
+.update-action-btn {
+  max-width: 100px;
+  padding: 8px 10px;
+  background-color: rgb(52, 152, 219);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.update-action-btn:hover {
+  background-color: rgb(41, 128, 185);
+}

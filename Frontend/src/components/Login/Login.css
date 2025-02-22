@@ -1,0 +1,76 @@
+.con {
+    height: 83vh;
+    background: linear-gradient(rgba(28, 45, 74, 0.8), rgba(28, 45, 74, 0.8)), 
+                url('../../assets/gs-photo.jpg');
+    background-size: cover;
+    background-position: center;
+    
+    /* Flexbox for centering */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background-color: #b87d4b;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 340px;
+}
+
+/* Optional: Make sure footer stays at the bottom */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: white;
+    text-align: left;
+    margin-top: 10px;
+}
+
+input[type="text"], 
+input[type="password"] {
+    width: 95%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-btn {
+    background-color: #b03c3c;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #5a2e2e;
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
