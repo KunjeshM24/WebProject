@@ -1,0 +1,68 @@
+.navbar {
+    background-color: #1c2d4a;
+    color: #ffc107;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* padding: 20px 10%;  Reduce side spacing */
+    padding-left: 10%;
+    padding-right: 10%;
+    height: 100px;  /* Adjusted height */
+    max-width: 100%; /* Prevents excessive width */
+    margin-top: auto;/* Centers the navbar */
+}
+
+/* Left Section: Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    /* margin-top: 30px; */
+    gap: 20px; /* Reduce space between logo & text */
+}
+
+.logo img {
+    width: 70px; /* Adjusted size */
+    height: 70px;
+    border-radius: 50%;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.address {
+    font-size: 14px;
+    color: #d9d9d9;
+}
+
+/* Right Section: Help & Support */
+.help-support {
+    text-align: right;
+    /* margin-top: 40px; */
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduce spacing */
+}
+
+.help-support .support-heading{
+    display: flex;
+}
+
+.help-support a {
+    color: white;
+    text-decoration: none;
+}
+
+.help-support a:hover {
+    text-decoration: underline;
+}
+
+/* Icons inside Help & Support */
+.help-support .support-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Reduce spacing between icon & text */
+}
