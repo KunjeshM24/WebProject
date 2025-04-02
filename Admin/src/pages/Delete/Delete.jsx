@@ -86,6 +86,7 @@ const Delete = () => {
                   <th>IP Address</th>
                   <th>Location</th>
                   <th>Category</th>
+                  <th>Password</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -96,6 +97,7 @@ const Delete = () => {
                     <td>{wifi.IP_Addr}</td>
                     <td>{wifi.Location}</td>
                     <td>{wifi.Category}</td>
+                    <td>{wifi.Password}</td>
                     <td>
                       <button className="delete-action-btn" onClick={() => deleteItem("wifi", wifi.WiFiId)}>
                         Delete

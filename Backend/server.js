@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
+// DB - backend
 // Database Info
 const db = mysql.createConnection({
   host: "localhost",
@@ -26,6 +27,8 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
+// Frontend - backend
+// Login
 app.post("/api/login", (req, res) => {
   console.log("Received Request:", req.body);
   const { id, password, role } = req.body;
@@ -48,16 +51,58 @@ app.post("/api/login", (req, res) => {
     res.json({ message: "Login successful", token, user });
   });
 });
+
+// Get inforamtion for user
+app.get('/api/devices/:dept/:categories', (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { dept, categories } = req.params;
+    const categoryList = categories.split(",");
+
+    let queryWiFi = "SELECT * FROM WiFi WHERE Location = ?";
+    let querySwitches = "SELECT * FROM Switch WHERE Location = ?";
+    let queryParamsWiFi = [dept];
+    let queryParamsSwitches = [dept];
+
+    if (categoryList.includes('E') || decoded.role === 'E') {
+      console.log("Fetching all WiFi and Switches for role E");
+    } else {
+      queryWiFi += " AND Category IN (?)";
+      querySwitches += " AND Category IN (?)";
+      queryParamsWiFi.push(categoryList);
+      queryParamsSwitches.push(categoryList);
+    }
+
+    db.query(queryWiFi, queryParamsWiFi, (err, wifiResults) => {
+      if (err) return res.status(500).send(err);
+
+      db.query(querySwitches, queryParamsSwitches, (err, switchResults) => {
+        if (err) return res.status(500).send(err);
+
+        res.json({ wifi: wifiResults, switches: switchResults });
+      });
+    });
+  } catch (error) {
+    return res.status(403).json({ message: "Invalid or expired token" });
+  }
+});
+
+// Admin - backend
 // Add WiFi Details
 app.post("/api/wifi/add", (req, res) => {
-  const { WiFiId, IP_Addr, Location, Category } = req.body;
+  const { WiFiId, IP_Addr, Location, Category, Password } = req.body;  
 
-  if (!WiFiId || !IP_Addr || !Location || !Category) {
+  if (!WiFiId || !IP_Addr || !Location || !Category || !Password) {
     return res.status(400).json({ success: false, message: "All fields are required" });
   }
 
-  const sql = "INSERT INTO WiFi (WiFiId, IP_Addr, Location, Category) VALUES (?, ?, ?, ?)";
-  db.query(sql, [WiFiId, IP_Addr, Location, Category], (err) => {
+  const sql = "INSERT INTO WiFi (WiFiId, IP_Addr, Location, Category, Password) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [WiFiId, IP_Addr, Location, Category, Password], (err) => {
     if (err) {
       console.error("Error inserting WiFi data:", err);
       return res.status(500).json({ success: false, message: "Database error" });
@@ -66,17 +111,16 @@ app.post("/api/wifi/add", (req, res) => {
   });
 });
 
-
 // Add Switch Details
 app.post('/api/switch/add', (req, res) => {
-  const { SwitchId, Location, Category } = req.body;
+  const { SwitchId, IP_Addr, Location, Category } = req.body;  
 
-  if (!SwitchId || !Location || !Category) {
+  if (!SwitchId || !Location || !Category || !IP_Addr) {
     return res.status(400).json({ success: false, message: "All fields are required" });
   }
 
-  const sql = "INSERT INTO Switch (SwitchId, Location, Category) VALUES (?, ?, ?)";
-  db.query(sql, [SwitchId, Location, Category], (err) => {
+  const sql = "INSERT INTO Switch (SwitchId, IP_Addr, Location, Category) VALUES (?, ?, ?, ?)";
+  db.query(sql, [SwitchId, IP_Addr, Location, Category], (err) => {
     if (err) {
       console.error("Error inserting Switch data:", err);
       return res.status(500).json({ success: false, message: "Database error" });
@@ -84,7 +128,6 @@ app.post('/api/switch/add', (req, res) => {
     res.json({ success: true, message: "Switch details added successfully" });
   });
 });
-
 
 // DELETE WiFi
 app.delete("/api/wifi/delete/:id", (req, res) => {
@@ -135,58 +178,31 @@ app.get('/api/:type/get/:id', (req, res) => {
   });
 });
 
-// Update 
+//Update
 app.post('/api/:type/update', (req, res) => {
   const table = req.params.type === 'wifi' ? 'WiFi' : 'Switch';
   const idField = req.params.type === 'wifi' ? 'WiFiId' : 'SwitchId';
-  const updates = Object.keys(req.body).map(key => `${key} = ?`).join(', ');
-  const values = [...Object.values(req.body), req.body[idField]];
+
+  // Extract IDs
+  const originalId = req.body.originalId;  // Old ID (WHERE clause)
+  const newId = req.body[idField];         // Updated ID (SET clause)
+
+  if (!originalId || !newId) {
+      return res.status(400).json({ success: false, message: "Missing ID for update" });
+  }
+
+  // Remove originalId from update fields
+  const updateFields = { ...req.body };
+  delete updateFields.originalId;
+
+  // Create update query
+  const updates = Object.keys(updateFields).map(key => `${key} = ?`).join(', ');
+  const values = [...Object.values(updateFields), originalId];
+
   db.query(`UPDATE ${table} SET ${updates} WHERE ${idField} = ?`, values, (err) => {
       if (err) return res.status(500).json({ success: false, message: "DB Error" });
       res.json({ success: true, message: "Updated Successfully" });
   });
 });
-
-// Get inforamtion for user
-app.get('/api/devices/:dept/:categories', (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const { dept, categories } = req.params;
-    const categoryList = categories.split(",");
-
-    let queryWiFi = "SELECT * FROM WiFi WHERE Location = ?";
-    let querySwitches = "SELECT * FROM Switch WHERE Location = ?";
-    let queryParamsWiFi = [dept];
-    let queryParamsSwitches = [dept];
-
-    if (categoryList.includes('E') || decoded.role === 'E') {
-      console.log("Fetching all WiFi and Switches for role E");
-    } else {
-      queryWiFi += " AND Category IN (?)";
-      querySwitches += " AND Category IN (?)";
-      queryParamsWiFi.push(categoryList);
-      queryParamsSwitches.push(categoryList);
-    }
-
-    db.query(queryWiFi, queryParamsWiFi, (err, wifiResults) => {
-      if (err) return res.status(500).send(err);
-
-      db.query(querySwitches, queryParamsSwitches, (err, switchResults) => {
-        if (err) return res.status(500).send(err);
-
-        res.json({ wifi: wifiResults, switches: switchResults });
-      });
-    });
-  } catch (error) {
-    return res.status(403).json({ message: "Invalid or expired token" });
-  }
-});
-
-
 
 app.listen(5000, () => console.log("Server running on port 5000"));

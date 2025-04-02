@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./Add.css"; // Updated CSS file
@@ -11,37 +11,78 @@ const Add = () => {
     customLocation: "",
     category: "S", // Default category
     ip_addr: "",
+    password: "", // New password field
   });
+
+  // Reset form data when component mounts
+  useEffect(() => {
+    const formEl = document.getElementById("device-form");
+    if (formEl) {
+      formEl.reset();
+    }
+    // Force clear the password field
+    setFormData(prev => ({...prev, password: ""}));
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const isValidIP = (ip) => ip.split('.').length - 1 === 4;
+  const isValidIP = (ip) => ip.split('.').length === 4;
+
+  // Password validation function
+  const isValidPassword = (password) => {
+    // Check if password is at least 8 characters
+    if (password.length < 8) return false;
+    
+    // Check if password contains at least one uppercase letter
+    if (!/[A-Z]/.test(password)) return false;
+    
+    // Check if password contains at least one number
+    if (!/[0-9]/.test(password)) return false;
+    
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let endpoint = formType === "WiFi" ? "/api/wifi/add" : "/api/switch/add";
 
     const requestData = {
-      WiFiId: formData.id,
+      ...(formType === "WiFi" ? { WiFiId: formData.id } : { SwitchId: formData.id }),
       IP_Addr: formData.ip_addr,
       Location: formData.customLocation || formData.location,
       Category: formData.category,
     };
+    
+    // Only add password for WiFi entries
+    if (formType === "WiFi") {
+      // Validate password
+      if (!isValidPassword(formData.password)) {
+        toast.error("Password must be at least 8 characters and contain at least one uppercase letter and one number");
+        return;
+      }
+      requestData.Password = formData.password;
+    }
 
     if (!isValidIP(requestData.IP_Addr)) {
-      toast.error("Invalid IP Address! It should contain exactly 4 dots.");
+      toast.error("Invalid IP Address! It should contain exactly 3 dots.");
       return;
-    }
+    } 
 
     try {
       const response = await axios.post(`http://localhost:5000${endpoint}`, requestData);
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setFormData({ id: "", location: "", customLocation: "", category: "S", ip_addr: "" });
+        setFormData({ id: "", location: "", customLocation: "", category: "S", ip_addr: "", password: "" });
+        
+        // Reset form completely to avoid browser autofill persistence
+        const formEl = document.getElementById("device-form");
+        if (formEl) {
+          formEl.reset();
+        }
       } else {
         toast.error(response.data.message);
       }
@@ -63,7 +104,7 @@ const Add = () => {
           </button>
         </div>
 
-        <form className="form" onSubmit={handleSubmit}>
+        <form id="device-form" className="form" onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label>{formType} ID:</label>
             <input type="number" name="id" value={formData.id} onChange={handleInputChange} required />
@@ -104,6 +145,22 @@ const Add = () => {
               <option value="G">G</option>
             </select>
           </div>
+
+          {/* Password field - only show for WiFi */}
+          {formType === "WiFi" && (
+            <div className="form-group">
+              <label>Password:</label>
+              <input 
+                type="password" 
+                name="password"
+                autoComplete="new-password"
+                value={formData.password} 
+                onChange={handleInputChange} 
+                required 
+              />
+              <small className="password-requirements">Min 8 chars, 1 uppercase, 1 number</small>
+            </div>
+          )}
 
           <button type="submit" className="submit-btn">ADD</button>
         </form>
