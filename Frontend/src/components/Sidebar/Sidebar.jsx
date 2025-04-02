@@ -62,6 +62,7 @@ const Sidebar = ({ userType }) => {
                     <div className="device-details">
                       <p><strong>ID:</strong> {wifi.WiFiId}</p>
                       <p><strong>IP Address:</strong> {wifi.IP_Addr}</p>
+                      <p><strong>Password:</strong> {wifi.Password}</p>
                     </div>
                   </div>
                 ))}

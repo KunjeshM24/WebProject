@@ -66,6 +66,7 @@ const Update = () => {
                   <th>IP Address</th>
                   <th>Location</th>
                   <th>Category</th>
+                  <th>Password</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -76,6 +77,7 @@ const Update = () => {
                     <td>{wifi.IP_Addr}</td>
                     <td>{wifi.Location}</td>
                     <td>{wifi.Category}</td>
+                    <td>{wifi.Password || "N/A"}</td>
                     <td>
                       <button className="update-action-btn" onClick={() => window.location.href = `/updateItem/wifi/${wifi.WiFiId}`}>
                         Update

@@ -13,23 +13,10 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="container">
-        {/* Left Section - Department Boxes */}
-        {/* <div className="features">
-          {[
-            "Computer Science Department",
-            "Information Technology Department",
-            "Electronics & Communication Department",
-            "Electric Engineering Department",  
-          ].map((dept, index) => (
-            <div key={index} className="feature-box">
-              <h3>{dept}</h3>
-            </div>
-          ))}
-        </div> */}
         <div className="features">
           <p>Welcome to,</p>
           <h1>SGSITS Data Center Automation</h1>
-          <button>About Us</button>
+          <button onClick={() => handleNavigation("/about-us")}>About Us</button>
         </div>
 
         {/* Right Section - Login Panel */}
