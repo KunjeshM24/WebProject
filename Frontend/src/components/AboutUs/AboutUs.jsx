@@ -14,7 +14,9 @@ const AboutUs = () => {
           efficiency, scalability, and modern UI/UX practices.
         </p>
         <div className="button-container">
-          <button className="about-button">Learn More</button>
+          <button className="about-button" onClick={() => window.open("https://sgsits.ac.in/about-institute", "_blank", "noopener,noreferrer")}>
+            Learn More
+          </button>
         </div>
       </div>
     </div>

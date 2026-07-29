@@ -1,9 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import "./Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
 
   // Function to handle navigation
   const handleNavigation = (route) => {
@@ -17,6 +18,7 @@ const Dashboard = () => {
           <p>Welcome to,</p>
           <h1>SGSITS Data Center Automation</h1>
           <button onClick={() => handleNavigation("/about-us")}>About Us</button>
+          {/* <button onClick={() => navigation('https://')}>About Us</button> */}
         </div>
 
         {/* Right Section - Login Panel */}
