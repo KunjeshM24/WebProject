@@ -9,9 +9,9 @@ app.use(express.json());
 app.use(cors());
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
-// DB - backend
-// Database Info
-const db = mysql.createConnection({
+// DB - backe
+// Database Info -
+const db = mysql.creaeConnection({x
   host: "localhost",
   user: "root",
   password: "Kunjesh123",
